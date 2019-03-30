@@ -4,9 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
+  },
+  "bin": {
+    "cj": "./index.js"
   },
   "keywords": [],
   "author": "varaprasadh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.3.3"
+  }
 }

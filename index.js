@@ -1,20 +1,17 @@
+#!/usr/bin/env node
+
 const fs=require('fs');
 const path=require('path');
+const colors=require('colors');
 
-// console.log(process.argv);
 var props=[...process.argv.slice(2)];
-// console.log(props);
-var source=props[props.indexOf('-s')+1] || null;
-var target=props[props.indexOf('-o')+1] || null;
-
-console.log("source:"+source,"target:"+target);
+var source = props.indexOf('-s')>=0?props[props.indexOf('-s')+1] : null;
+var target = props.indexOf('-o')>=0?props[props.indexOf('-o')+1] : null;
 parse(source,target);
-
-
 
 function parse(source,target){
     if(source==null){
-        console.log("specify the source file...");
+        console.log("specify the source file...".red);
         return;
     }
     var s_ext=source.slice(source.lastIndexOf('.')+1);
@@ -44,21 +41,19 @@ function parse(source,target){
                 objects.push(obj);
             }
         });
-        // showJSON(objects);
-         
+
     if(!target){
         showJSON(objects);
         return;
     }
     else{
       var jsonData = JSON.stringify(objects);
-      console.log(`data writing to the file:${target}`);
         fs.writeFile(path.join(target), jsonData,(err)=>{
             if(err){
-                console.log("something went wrong..");
+                console.log("something went wrong..".red);
             }
             else{
-                console.log(`data is written to the ${target} file`);
+                console.log(`json data is written to the ${target} file`.green);
             }
         });
     }
@@ -71,7 +66,6 @@ function parse(source,target){
        var jsonObj=JSON.parse(jsonData);
        var headProps=Object.keys(jsonObj[0]);
        var headrow=headProps.toString();
-    //    console.log(headrow);
        var dataRows=[];
        jsonObj.forEach(obj=>{
          var row=[Object.values(obj)].toString();
@@ -79,26 +73,25 @@ function parse(source,target){
            dataRows.push(row.concat('\n'));
        })  
         var csvData = headrow.concat('\n',dataRows.join('')); 
-     
+       
         if(!target){
-            console.log(csvData); 
+            console.log(csvData.yellow); 
         }
         else{
             fs.writeFile(path.join(target),csvData,(err)=>{
                 if(err){
-                    console.log("something went wrong..");
+                    console.log("something went wrong..".red);
                 }
                 else{
-                    console.log(`csv data has been succesfully written to the ${target} file`);
+                    console.log(`csv data has been succesfully written to the ${target} file`.green);
                 }
             });
         }
     }
 }
 function showJSON(objs){
-    
     objs.forEach(obj=>{
-        console.log(JSON.stringify(obj),'\n');
+        console.log(JSON.stringify(obj).yellow,'\n');
     })
    
 }
